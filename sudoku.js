@@ -818,7 +818,7 @@ var Game = React.createClass({
 					<td className="solve">{solver}</td>
 					<td><table cellSpacing="20">
 						<tr><td className="timer">{timer}</td></tr>
-						<tr><td className="time">Time to Complete Last Puzzule: {this.state.lastCompletedTime}</td></tr>
+						<tr><td className="time">Time to Complete Last Puzzle: {this.state.lastCompletedTime}</td></tr>
 					</table></td>
 				</table>
 			</div>
