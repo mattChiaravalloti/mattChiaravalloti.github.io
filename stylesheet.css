@@ -126,10 +126,21 @@ table, td, tr {
 }
 
 .time {
+	color: white;
 	font-family: 'Yanone Kaffeesatz', sans-serif;
 	font-size: 20px;
 	border: 2px solid #a1a1a1;
 	padding: 10px 40px;
 	border-radius: 25px;
 	background-color: #67dbac;
+}
+
+.bestTime {
+	color: white;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	font-size: 20px;
+	border: 2px solid #a1a1a1;
+	padding: 10px 40px;
+	border-radius: 25px;
+	background-color: #98a8d7;
 }

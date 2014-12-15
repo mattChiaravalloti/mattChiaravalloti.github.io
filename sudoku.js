@@ -1,5 +1,10 @@
 //Sudoku
 
+//React instead of Backbone?
+
+//http://cs.stackexchange.com/questions/72/random-sudoku-generator
+//interesting
+
 /*
 
 [] = cell
@@ -511,8 +516,9 @@ var Box = React.createClass({
 
 var Game = React.createClass({
 	getInitialState: function() {
+		var time = (localStorage["best_time"]) ? localStorage["best_time"] : 0;
 		return {solution:[], gameBoard:[], selectedNum:0, lastWrong:null, check:false, 
-			secondsElapsed:0, lastCompletedTime:0, curDifficulty: ""};
+			secondsElapsed:0, lastCompletedTime:0, curDifficulty: "", bestTime:time};
 	},
 	/* ADAPTED FROM REACT.js WEBSITE! */
 	tick: function() {
@@ -649,7 +655,12 @@ var Game = React.createClass({
 					}
 				}
 				if (done) {
-					this.setState({lastCompletedTime: this.state.secondsElapsed});
+					var t = this.state.secondsElapsed;
+					if (t < this.state.bestTime || this.state.bestTime === 0) {
+						localStorage["best_time"] = t;
+						this.setState({bestTime: t});
+					}
+					this.setState({lastCompletedTime: t});
 				}
 			} else {
 				var board = this.state.gameBoard;
@@ -668,7 +679,12 @@ var Game = React.createClass({
 					}
 				}
 				if (done && isValid(board)) {
-					this.setState({lastCompletedTime: this.state.secondsElapsed});
+					var t = this.state.secondsElapsed;
+					if (t < this.state.bestTime || this.state.bestTime === 0) {
+						localStorage["best_time"] = t;
+						this.setState({bestTime: t});
+					}
+					this.setState({lastCompletedTime: t});
 				} else if (done) {
 					$(this.state.lastWrong).addClass('wrong');
 				}
@@ -814,6 +830,7 @@ var Game = React.createClass({
 					<td><table cellSpacing="20">
 						<tr><td className="timer">{timer}</td></tr>
 						<tr><td className="time">Time to Complete Last Puzzle: {this.state.lastCompletedTime}</td></tr>
+						<tr><td className="bestTime">Best Time: {this.state.bestTime}</td></tr>
 					</table></td>
 				</table>
 			</div>
