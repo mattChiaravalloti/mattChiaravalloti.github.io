@@ -615,7 +615,9 @@ var Game = React.createClass({
 	},
 	onDifClick: function(difficulty) {
 		if (difficulty.props.difficulty === "Hard") {
-			alert("This may take a moment to load.  If you wait over 10 seconds, refresh the page.\nFeel free to close this window.");
+			var msg = "This may take a moment to load.  If you wait over 30 seconds, please refresh the page and try again.";
+			var msg2 = "\n Feel free to close this window.  Thanks for playing!"
+			alert(msg + msg2);
 		}
 		var dif = "-" + difficulty.props.difficulty + "-";
 		this.setState({secondsElapsed: 0, curDifficulty: dif});
