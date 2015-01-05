@@ -614,6 +614,10 @@ var Game = React.createClass({
 		$(newID).addClass("selected");
 	},
 	onDifClick: function(difficulty) {
+		if (difficulty.props.difficulty === "Hard") {
+			alert("This may take a moment to load.  If you wait over 10 seconds, refresh the page.\n
+				Feel free to close this window.");
+		}
 		var dif = "-" + difficulty.props.difficulty + "-";
 		this.setState({secondsElapsed: 0, curDifficulty: dif});
 		this.createBoard(difficulty.props.difficulty);
