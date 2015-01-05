@@ -59,17 +59,138 @@ var getBoxNumber = function(i) {
 	return box;
 }
 
+var genBoard = function() {
+	var brd = [];
+
+	var rowArr = [];
+	var colArr = [];
+	var boxArr = [];
+
+	for (var i = 0; i < 9; i++) {
+		rowArr[i] = [];
+		colArr[i] = [];
+		boxArr[i] = [];
+	}
+
+	for (var i = 0; i < 81; i++) {
+		//get the row
+		var row = Math.floor(i / 9);
+
+		//get the column
+		var col = i % 9;
+
+		//get the box
+		var box = 0;
+		if (row > 5) {
+			if (col > 5)
+				box = 8;
+			else if (col > 2)
+				box = 7;
+			else
+				box = 6;
+		} else if (row > 2) {
+			if (col > 5)
+				box = 5;
+			else if (col > 2)
+				box = 4;
+			else
+				box = 3;
+		} else {
+			if (col > 5)
+				box = 2;
+			else if (col > 2)
+				box = 1;
+			else
+				box = 0;
+		}
+
+		var random = _.random(1,9);
+
+		var ranArr = [];
+
+		while (_.contains(rowArr[row], random) ||
+			   _.contains(colArr[col], random) ||
+			   _.contains(boxArr[box], random)) {
+			
+			if (!_.contains(ranArr, random)) {
+				ranArr.push(random);
+			}
+
+			if (ranArr.length == 9) break;
+
+			random = _.random(1,9);
+		}
+
+		if (ranArr.length == 9) break;
+
+		rowArr[row].push(random);
+		colArr[col].push(random);
+		boxArr[box].push(random);
+		brd[i] = random;
+	}
+
+	while (brd.length != 81) {
+		brd = genBoard();
+	}
+
+	return brd;
+}
+
+var makePartialBoard = function(board, difficulty) {
+	//number of values that will be given
+	var numGivens = 0;
+	if (difficulty === 'Easy') {
+		numGivens = _.random(36, 45);
+	} else if (difficulty === 'Medium') {
+		numGivens = _.random(30,35);
+	} else {
+		numGivens = _.random(25,29);
+	}
+
+	var numRemoved = 81 - numGivens;
+
+	//create copy to manipulate and return
+	var copy = [];
+	for (var i = 0; i < 81; i++) {
+		copy[i] = board[i];
+	}
+
+	//array of indices removed
+	var removed = [];
+
+	for (var i = 0; i < numRemoved; i++) {
+		//get a random index to remove
+		var random = _.random(0,80);
+		while (_.contains(removed, random)) {
+			random = _.random(0,80);
+		}
+
+		//remove that number and check that the partial solution is still unique
+		var temp = copy[random];
+		copy[random] = 0;
+		//while it's not unique, choose a dif index
+		while (!isUnique(copy, random)) {
+			removed.push(random);
+			copy[random] = temp;
+			while (_.contains(removed, random)) {
+				random = _.random(0,80);
+			}
+			temp = copy[random];
+			copy[random] = 0;
+		}
+		removed.push(random);
+	}
+
+	return copy;
+}
 
 var hasNextEmpty = function(board) {
-	for (var i = 0; i < 81; i++) {
-		if (!board[i]) return true;
-	}
-	return false;
+	return _.contains(board, 0);
 }
 
 var nextEmpty = function(board) {
 	for (var i = 0; i < 81; i++) {
-		if (!board[i]) return i;
+		if (board[i] === 0) return i;
 	}
 }
 
@@ -111,7 +232,7 @@ var isUniqueArr = function(arr) {
 	for (var i = 0; i < arr.length; i++) {
 		for (var j = 0; j < arr.length; j++) {
 			if (i != j) {
-				if (arr[i] === undefined || arr[j] === undefined) {
+				if (arr[i] === 0 || arr[j] === 0) {
 					continue;
 				}
 				else if (arr[i] === arr[j]) {
@@ -135,18 +256,19 @@ var isValid = function(board) {
 	return true;
 }
 
-var isSolution = function(board) {
-	console.log('here');
+var isSolvable = function(board) {
 	var copy = [];
 	for (var i = 0; i < 81; i++) {
 		copy[i] = board[i];
 	}
-	if (hasNextEmpty(copy)) {
-		var index = nextEmpty(copy);
+	if (hasNextEmpty(board)) {
+		var index = nextEmpty(board);
 		for (var i = 1; i < 10; i++) {
 			copy[index] = i;
 			if (isValid(copy)) {
-				if (isSolution(copy)) return true;
+				if (isSolvable(copy)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -155,198 +277,27 @@ var isSolution = function(board) {
 	}
 }
 
-/* This leads to 9 ^ n runtime...which is way too long, so unfortunately I can't produce Unique partial boards
-var isUnique = function (partialBoard) {
-	var numSol = 0;
-	var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-	var potentials = [];
-	for (var i = 0; i < 81; i++) {
-		if (!partialBoard[i]) {
-			potentials[i] = nums;
-		}
-	}
+var isUnique = function(board, index) {
+	var numSolutions = 0;
 
 	var copy = [];
 	for (var i = 0; i < 81; i++) {
-		copy[i] = partialBoard[i];
+		copy[i] = board[i];
 	}
 
-	for (var i = 0; i < 81; i++) {
-		if (!copy[i]) {
-			var temp = copy[i];
-			while (potentials[i].length > 0) {
-				var nextPotential = potentials[i].pop();
-				copy[i] = nextPotential;
-				if (isSolution(copy)) {
-					numSol++;
-					if (numSol > 1) {
-						return false;
-					}
+	for (var i = 1; i < 10; i++) {
+		copy[index] = i;
+		if (isValid(copy)) {
+			if (isSolvable(copy)) {
+				numSolutions++;
+				if (numSolutions > 1) {
+					return false;
 				}
 			}
-			copy[i] = temp;
-		}
-	}
-	return true;
-}
-*/
-
-var makeEasyBoard = function(fullBoard) {
-	//number of values that will be given
-	var numGivens = _.random(36,45);
-
-	// an array to count number of occurences of each number,
-	//the index number corresponds to the actual num on the board
-	var numOfOccurs = [[]];
-
-	//each one occurs min of 3 times
-	for (var i = 1; i < 10; i++) {
-		//each b is a random box in which this number will be given
-		var b1 = _.random(0,8);
-		var b2 = _.random(0,8);
-		while (b1 === b2) {
-			b2 = _.random(0,8);
-		}
-		var b3 = _.random(0,8);
-		while (b1 === b3 || b2 === b3) {
-			b3 = _.random(0,8);
-		}
-		numOfOccurs[i] = [b1, b2, b3];
-	}
-
-	//the difference between the number of givens and the definite 3 occurences of each num 
-	var dif = numGivens - 27;
-
-	//generate another random box for any of the numbers to appear until the difference is gapped
-	for (var i = 0; i < dif; i++) {
-		var r = _.random(1,9);
-		var b = _.random(0,8);
-		while (_.contains(numOfOccurs[r], b)) {
-			b = _.random(0,8);
-		}
-		numOfOccurs[r].push(b);
-	}
-
-	//array to be returned
-	var ret = [];
-	for (var i = 0; i < 81; i++) {
-		var box = getBoxNumber(i);
-		var cur = fullBoard[i];
-
-		if (_.contains(numOfOccurs[cur], box)) {
-			ret[i] = cur;
-		}
-	}
-	return ret;
-}
-
-var makeMedBoard = function(fullBoard) {
-	//number of values that will be given
-	var numGivens = _.random(25,30);
-
-	// an array to count number of occurences of each number,
-	//the index number corresponds to the actual num on the board
-	var numOfOccurs = [[]];
-
-	//each one occurs min of 2 times
-	for (var i = 1; i < 10; i++) {
-		//each b is a random box in which this number will be given
-		var b1 = _.random(0,8);
-		var b2 = _.random(0,8);
-		while (b1 === b2) {
-			b2 = _.random(0,8);
-		}
-		numOfOccurs[i] = [b1, b2];
-	}
-
-	//the difference between the number of givens and the definite 3 occurences of each num 
-	var dif = numGivens - 18;
-
-	//generate another random box for any of the numbers to appear until the difference is gapped
-	for (var i = 0; i < dif; i++) {
-		var r = _.random(1,9);
-		var b = _.random(0,8);
-		while (_.contains(numOfOccurs[r], b)) {
-			b = _.random(0,8);
-		}
-		numOfOccurs[r].push(b);
-	}
-
-	//array to be returned
-	var ret = [];
-	for (var i = 0; i < 81; i++) {
-		var box = getBoxNumber(i);
-		var cur = fullBoard[i];
-
-		if (_.contains(numOfOccurs[cur], box)) {
-			ret[i] = cur;
-		}
-	}
-	return ret;
-}
-
-var makeHardBoard = function(fullBoard) {
-	//number of vals to be given
-	var numGivens = _.random(20,24)
-
-	// an array to count number of occurences of each number,
-	//the index number corresponds to the actual num on the board
-	var numOfOccurs = [[]];
-
-	//one number does not appear
-	var willNotAppear = _.random(1,9);
-
-	//one appears only once
-	var willAppearOnce = _.random(1,9);
-
-	while (willAppearOnce === willNotAppear) {
-		willAppearOnce = _.random(1,9);
-	}
-
-	//the rest appear at least 2 times
-	for (var i = 1; i < 10; i++) {
-		if (i === willNotAppear) continue;
-		if (i === willAppearOnce) {
-			var b1 = _.random(0,8);
-			numOfOccurs[i] = [b1];
-		} else {
-			//each b is a random box in which this number will be given
-			var b1 = _.random(0,8);
-			var b2 = _.random(0,8);
-			while (b1 === b2) {
-				b2 = _.random(0,8);
-			}
-			numOfOccurs[i] = [b1, b2];
 		}
 	}
 
-	//the difference between the number of givens and the definite 3 occurences of each num 
-	var dif = numGivens - 15;
-
-	//generate another random box for any of the numbers to appear until the difference is gapped
-	for (var i = 0; i < dif; i++) {
-		var r = _.random(1,9);
-		while (r === willAppearOnce || r === willNotAppear) {
-			r = _.random(1,9);
-		}
-		var b = _.random(0,8);
-		while (_.contains(numOfOccurs[r], b)) {
-			b = _.random(0,8);
-		}
-		numOfOccurs[r].push(b);
-	}
-
-	//array to be returned
-	var ret = [];
-	for (var i = 0; i < 81; i++) {
-		var box = getBoxNumber(i);
-		var cur = fullBoard[i];
-
-		if (_.contains(numOfOccurs[cur], box)) {
-			ret[i] = cur;
-		}
-	}
-	return ret;
+	return numSolutions === 1;
 }
 
 var HintCheckBox = React.createClass({
@@ -447,11 +398,18 @@ var Cell = React.createClass({
 	},
 	render: function() {
 		var idNum = "cell" + this.props.idNum;
-		return (
-			<td className='cell' id={idNum} onClick={this.handleClick}>
-				{this.props.val}
-			</td>
-		);
+		if (this.props.val != 0) {
+			return (
+				<td className='cell' id={idNum} onClick={this.handleClick}>
+					{this.props.val}
+				</td>
+			);
+		} else {
+			return (
+				<td className='cell' id={idNum} onClick={this.handleClick}>
+				</td>
+			);
+		}
 	}
 });
 
@@ -511,88 +469,26 @@ var Box = React.createClass({
 
 var Game = React.createClass({
 	getInitialState: function() {
+		var time = (localStorage["best_time"]) ? localStorage["best_time"] : 0;
 		return {solution:[], gameBoard:[], selectedNum:0, lastWrong:null, check:false, 
-			secondsElapsed:0, lastCompletedTime:0, curDifficulty: ""};
+			secondsElapsed:0, lastCompletedTime:0, curDifficulty: "", bestTime:time};
 	},
 	/* ADAPTED FROM REACT.js WEBSITE! */
 	tick: function() {
-    this.setState({secondsElapsed: this.state.secondsElapsed + 1});
-  },
-  componentDidMount: function() {
-    this.interval = setInterval(this.tick, 1000);
-  },
-  componentWillUnmount: function() {
-    clearInterval(this.interval);
-  },
-  /* (end adaptation) */
+    	this.setState({secondsElapsed: this.state.secondsElapsed + 1});
+  	},
+  	componentDidMount: function() {
+    	this.interval = setInterval(this.tick, 1000);
+  	},
+  	componentWillUnmount: function() {
+    	clearInterval(this.interval);
+  	},
+  	/* (end adaptation) */
 	createBoard: function(difficulty) {
-		//helper function to generate complete board
-		var genBoard = function() {
-			var brd = [];
-
-			var rowArr = [];
-			var colArr = [];
-			var boxArr = [];
-
-			for (var i = 0; i < 9; i++) {
-				rowArr[i] = [];
-				colArr[i] = [];
-				boxArr[i] = [];
-			}
-
-			for (var i = 0; i < 81; i++) {
-				//get the row
-				var row = Math.floor(i / 9);
-
-				//get the column
-				var col = i % 9;
-
-				//get the box
-				var box = getBoxNumber(i);
-
-				var random = _.random(1,9);
-
-				var ranArr = [];
-
-				while (_.contains(rowArr[row], random) ||
-					   _.contains(colArr[col], random) ||
-					   _.contains(boxArr[box], random)) {
-					
-					if (!_.contains(ranArr, random)) {
-						ranArr.push(random);
-					}
-
-					if (ranArr.length == 9) break;
-
-					random = _.random(1,9);
-				}
-
-				if (ranArr.length == 9) break;
-
-				rowArr[row].push(random);
-				colArr[col].push(random);
-				boxArr[box].push(random);
-				brd[i] = random;
-			}
-
-			while (brd.length != 81) {
-				brd = genBoard();
-			}
-
-			return brd;
-		}
-
 		var board = genBoard();
 		this.setState({solution: board});
 
-		var gBoard = [];
-		if (difficulty === "Easy") {
-			gBoard = makeEasyBoard(board);
-		} else if (difficulty === "Medium") {
-			gBoard = makeMedBoard(board);
-		} else {
-			gBoard = makeHardBoard(board);
-		}
+		var gBoard = makePartialBoard(board, difficulty);
 
 		var copy = [];
 		for (var i = 0; i < 81; i++) {
@@ -602,7 +498,7 @@ var Game = React.createClass({
 		this.setState({gameBoard: gBoard, original: copy});
 
 		if (this.state.lastWrong != null) {
-				$(this.state.lastWrong).removeClass("wrong");
+			$(this.state.lastWrong).removeClass("wrong");
 		}
 
 		//works every time except first time...
@@ -643,32 +539,42 @@ var Game = React.createClass({
 				}
 				var done = true;
 				for (var i = 0; i < 81; i++) {
-					if (board[i] === undefined) {
+					if (board[i] === 0) {
 						done = false;
 						break;
 					}
 				}
 				if (done) {
-					this.setState({lastCompletedTime: this.state.secondsElapsed});
+					var t = this.state.secondsElapsed;
+					if (t < this.state.bestTime || this.state.bestTime === 0) {
+						localStorage["best_time"] = t;
+						this.setState({bestTime: t});
+					}
+					this.setState({lastCompletedTime: t});
 				}
 			} else {
 				var board = this.state.gameBoard;
 				var origin = this.state.original;
 				var cellID = "#cell" + cell.props.idNum;
-				if (origin[cell.props.idNum] === undefined) {
+				if (origin[cell.props.idNum] === 0) {
 					board[cell.props.idNum] = this.state.selectedNum;
 					this.setState({gameBoard: board});
 				}
 
 				var done = true;
 				for (var i = 0; i < 81; i++) {
-					if (board[i] === undefined) {
+					if (board[i] === 0) {
 						done = false;
 						break;
 					}
 				}
 				if (done && isValid(board)) {
-					this.setState({lastCompletedTime: this.state.secondsElapsed});
+					var t = this.state.secondsElapsed;
+					if (t < this.state.bestTime || this.state.bestTime === 0) {
+						localStorage["best_time"] = t;
+						this.setState({bestTime: t});
+					}
+					this.setState({lastCompletedTime: t});
 				} else if (done) {
 					$(this.state.lastWrong).addClass('wrong');
 				}
@@ -727,7 +633,7 @@ var Game = React.createClass({
 		for (var i = 0; i < 81; i++) {
 			if (!!cur[i] && cur[i] != sol[i]) {
 				var cellID = "#cell" + i;
-				cur[i] = undefined;
+				cur[i] = 0;
 
 				$(cellID).addClass('wrong');
 			}
@@ -814,6 +720,7 @@ var Game = React.createClass({
 					<td><table cellSpacing="20">
 						<tr><td className="timer">{timer}</td></tr>
 						<tr><td className="time">Time to Complete Last Puzzle: {this.state.lastCompletedTime}</td></tr>
+						<tr><td className="bestTime">Best Time: {this.state.bestTime}</td></tr>
 					</table></td>
 				</table>
 			</div>
