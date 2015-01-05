@@ -617,6 +617,7 @@ var Game = React.createClass({
 		var dif = "-" + difficulty.props.difficulty + "- LOADING";
 		this.setState({secondsElapsed: 0, curDifficulty: dif});
 		this.createBoard(difficulty.props.difficulty);
+		console.log('here');
 		var dif = "-" + difficulty.props.difficulty + "-";
 		this.setState({curDifficulty: dif});
 	},
