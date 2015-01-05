@@ -614,12 +614,9 @@ var Game = React.createClass({
 		$(newID).addClass("selected");
 	},
 	onDifClick: function(difficulty) {
-		var dif = "-" + difficulty.props.difficulty + "- LOADING";
+		var dif = "-" + difficulty.props.difficulty + "-";
 		this.setState({secondsElapsed: 0, curDifficulty: dif});
 		this.createBoard(difficulty.props.difficulty);
-		console.log('here');
-		var dif = "-" + difficulty.props.difficulty + "-";
-		this.setState({curDifficulty: dif});
 	},
 	onSolveClick: function() {
 		var sol = this.state.solution;
