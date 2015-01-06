@@ -1,6 +1,11 @@
 html, body {
 	font-family: 'PT Sans Narrow', sans-serif;
-  	position: relative;
+}
+
+#content {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 h1 {
@@ -21,5 +26,4 @@ a:link, a:visited {
 hr {
 	color: #999999;
 	width: 400px;
-	float: left;
 }
