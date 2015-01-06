@@ -2,6 +2,12 @@ html, body {
 	font-family: 'PT Sans Narrow', sans-serif;
 }
 
+#content {
+	margin-right: auto;
+	margin-left: auto;
+	width: 60%;
+}
+
 h1 {
 	color: #3aa9e0;
 }
