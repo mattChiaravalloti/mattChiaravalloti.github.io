@@ -7,25 +7,16 @@ h1 {
 	color: #3aa9e0;
 }
 
-h3 {
+h2 {
 	color: #ea4958;
 }
 
-#cislink {
+a:link {
 	color: #2d69af;
 	cursor: pointer;
+	font-weight: bold;
 }
 
 hr {
 	color: #999999;
-}
-
-#summary {
-	font-style: italic;
-}
-
-#sudoku {
-	color: #2d69af;
-	font-weight: bolder;
-	cursor: pointer;
 }
