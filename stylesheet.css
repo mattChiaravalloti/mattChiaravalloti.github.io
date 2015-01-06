@@ -11,7 +11,7 @@ h2 {
 	color: #ea4958;
 }
 
-a:link {
+a:link, a:visited {
 	color: #2d69af;
 	cursor: pointer;
 	font-weight: bold;
