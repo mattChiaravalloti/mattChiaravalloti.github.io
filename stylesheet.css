@@ -1,3 +1,31 @@
-h1, p, a {
-	color: teal;
+html, body {
+	height: 100%;
+	font-family: 'PT Sans Narrow', sans-serif;
+}
+
+h1 {
+	color: #3aa9e0;
+}
+
+h3 {
+	color: #ea4958;
+}
+
+#cislink {
+	color: #2d69af;
+	cursor: pointer;
+}
+
+hr {
+	color: #999999;
+}
+
+#summary {
+	font-style: italic;
+}
+
+#sudoku {
+	color: #2d69af;
+	font-weight: bolder;
+	cursor: pointer;
 }
