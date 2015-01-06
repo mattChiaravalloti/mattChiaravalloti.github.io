@@ -2,12 +2,6 @@ html, body {
 	font-family: 'PT Sans Narrow', sans-serif;
 }
 
-#content {
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
-}
-
 h1 {
 	color: #3aa9e0;
 }
@@ -25,5 +19,4 @@ a:link, a:visited {
 
 hr {
 	color: #999999;
-	width: 400px;
 }
