@@ -7,6 +7,11 @@ html, body {
 	overflow: hidden;
 }
 
+@viewport {
+	zoom: 1.0;
+	width: extend-to-zoom;
+}
+
 #content {
 	margin-right: auto;
 	margin-left: auto;
