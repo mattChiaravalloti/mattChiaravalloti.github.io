@@ -6,15 +6,16 @@ html, body {
 	margin-right: auto;
 	margin-left: auto;
 	width: 60%;
-	padding: 2;
 }
 
 h1 {
 	color: #3aa9e0;
+	padding: 0;
 }
 
 h2 {
 	color: #ea4958;
+	padding: 0;
 }
 
 a:link, a:visited {
