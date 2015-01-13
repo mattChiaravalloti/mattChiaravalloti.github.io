@@ -8,9 +8,9 @@ html, body {
 #content {
 	margin-right: auto;
 	margin-left: auto;
-	width: 50%;
+	width: 50vw;
 	height: 100vh;
-	background-color: white;
+	background-color: #fcfcfc;
 	border-radius: 20px;
 }
 
@@ -58,6 +58,11 @@ a:link, a:visited {
 	cursor: pointer;
 	font-weight: bold;
 	text-decoration: none;
+}
+
+a:hover {
+	background-color: #999999;
+	border-radius: 5px;
 }
 
 hr {
