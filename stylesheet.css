@@ -39,7 +39,7 @@ html, body {
 
 .icon:hover {
 	background-color: #999999;
-	border-radius: 10px;
+	border-radius: 100%;
 }
 
 .school {
@@ -60,7 +60,7 @@ a:link, a:visited {
 	text-decoration: none;
 }
 
-a:hover {
+.text-link:hover {
 	background-color: #999999;
 	border-radius: 5px;
 }
