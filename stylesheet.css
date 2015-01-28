@@ -89,11 +89,16 @@ hr {
 	margin: 50px 10px 0px 10px;
 }
 
+.main2 {
+	width: 97.7%;
+	margin: 0px 10px 50px 10px;
+}
+
 .summary {
 	background-color: #e9e9e9;
-	border-bottom-right-radius: 20px;
-	border-bottom-left-radius: 20px;
-	border-bottom: 2px solid #999999;
+	border-top-right-radius: 20px;
+	border-top-left-radius: 20px;
+	border-top: 2px solid #999999;
 	border-left: 1px solid #999999;
 	border-right: 1px solid #999999;
 }
@@ -120,14 +125,54 @@ td {
 }
 
 .link-description {
-	width: 50%;
+	width: 75%;
 	text-align: center;
+}
+
+.right {
+	border-right: 1px solid #999999;
+}
+
+.left {
+	border-left: 1px solid #999999;
+}
+
+.summary-left {
+	background-color: #e9e9e9;
+	border-bottom-right-radius: 20px;
+	border-top-right-radius: 20px;
+	border-bottom: 1px solid #999999;
+	border-top: 1px solid #999999;
+	border-right: 2px solid #999999;
+	padding: 10px;
+}
+
+.summary-right {
+	background-color: #e9e9e9;
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
+	border-bottom: 1px solid #999999;
+	border-left: 2px solid #999999;
+	border-top: 1px solid #999999;
+	padding: 10px;
 }
 
 td div p {
 	margin-top: 40px;
 }
 
-td p span {
+.summary-soon {
+	text-align: center;
 	cursor: default;
+	background-color: #e9e9e9;
+	border-bottom-right-radius: 20px;
+	border-bottom-left-radius: 20px;
+	border-bottom: 2px solid #999999;
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+}
+
+.summary-soon span {
+	font-weight: bold;
+	color: #ea4958;
 }
