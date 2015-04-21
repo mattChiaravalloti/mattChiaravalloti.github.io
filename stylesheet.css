@@ -11,6 +11,7 @@ html, body {
 	width: 55vw;
 	background-color: #fcfcfc;
 	border-radius: 20px;
+	padding-bottom:5px;
 }
 
 .header-top {
