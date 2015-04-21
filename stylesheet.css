@@ -7,8 +7,8 @@ html, body {
 #content {
 	margin-right: auto;
 	margin-left: auto;
-	width: 50vw;
-	height: 100vh;
+	margin-top: 5%;
+	width: 55vw;
 	background-color: #fcfcfc;
 	border-radius: 20px;
 }
