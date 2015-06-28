@@ -1,0 +1,26 @@
+#example-clickable {
+    width: 30%;
+    height: 200px;
+    margin: auto;
+    background-color: #17bfaf;
+    color: #e3e3e3;
+    text-align: center;
+}
+
+#example-clickable-text {
+    padding-top: 80px;
+}
+
+#hidden-example {
+    display: none;
+    
+    width: 15%;
+    height: 100px;
+    margin: auto;
+    
+    border: 1px solid #999999;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    
+    text-align: center;
+}
