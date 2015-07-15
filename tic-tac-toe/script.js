@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 	var turn = 0;
 
-	var playerToken;
+	var playerToken = 'X';
 
 	// This funciton returns true if all elements in the gameboard are non-empty strings
 	var boardIsFull = function () {
@@ -106,5 +106,12 @@ $(document).ready(function () {
 			$("#info").css("cursor", "default");
 			$("#info").html("X's Turn!");
 		}
+	});
+
+	var lastCellHovered = '';
+	$(".cell").hover(function () {
+		$(this).addClass("cell-hover");
+	}, function () {
+		$(this).removeClass("cell-hover");
 	});
 });
