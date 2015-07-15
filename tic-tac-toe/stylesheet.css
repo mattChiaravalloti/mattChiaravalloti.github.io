@@ -10,6 +10,14 @@ html, body {
 	-ms-user-select: none;
 }
 
+a:link, a:visited {
+	color: #2d69af;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+
 #title-section {
 	top: 5%;
 	position: relative;
