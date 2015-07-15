@@ -1,0 +1,73 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	/* Prevent accidental highlighting */
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-ms-user-select: none;
+}
+
+#main-content-container {
+	width: 100%;
+	margin: auto;
+	position: relative;
+	top: 50%;
+	transform: translate(0,-50%);
+	cursor: pointer;
+}
+
+.container {
+	position: relative;
+	width: 40%;
+	margin: auto;
+}
+
+.control-button {
+	width: 40%;
+	height: 100px;
+	margin: auto;
+	border-radius: 8px;
+	background-color: rgb(75,75,75);
+	text-align: center;
+	vertical-align: middle;
+}
+
+div.control-button p {
+	width: 40%;
+	margin: auto;
+	position: absolute;
+	top: 50%;
+	transform: translate(0, -50%);
+	color: rgb(210,210,210);
+}
+
+#random-button {
+	border-bottom: 1px solid rgb(215,215,215);
+}
+
+#rgb-choice-button {
+	border-top: 1px solid rgb(215,215,215);
+	border-bottom: 1px solid rgb(215,215,215);	
+}
+
+#hex-choice-button {
+	border-top: 1px solid rgb(215,215,215);
+}
+
+input {
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-style: italic;
+	font-size: 20px;
+	color: rgb(225,225,225);
+	background-color: transparent; 
+	border-style: solid; 
+	border-width: 0px 0px 1px 0px; 
+	border-color: darkred;
+	padding-left: 5px;
+}
+
+input:focus {
+	outline: none;
+}
