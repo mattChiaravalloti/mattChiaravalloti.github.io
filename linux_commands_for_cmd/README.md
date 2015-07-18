@@ -1,0 +1,2 @@
+## I wrote some common linux commands as batch (and python) files in order to use linux-like commands in the Windows command prompt.
+### (They're added to my system path so it's no cygwin, but they're still useful on ocassion)
