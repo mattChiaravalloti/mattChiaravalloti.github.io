@@ -149,6 +149,10 @@ td div p {
 	margin-top: 40px;
 }
 
+td div p.long-title {
+	margin-top: 30px;
+}
+
 .summary-soon {
 	padding: 5px;
 	text-align: center;
