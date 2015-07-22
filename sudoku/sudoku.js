@@ -59,247 +59,6 @@ var getBoxNumber = function(i) {
 	return box;
 }
 
-var genBoard = function() {
-	var brd = [];
-
-	var rowArr = [];
-	var colArr = [];
-	var boxArr = [];
-
-	for (var i = 0; i < 9; i++) {
-		rowArr[i] = [];
-		colArr[i] = [];
-		boxArr[i] = [];
-	}
-
-	for (var i = 0; i < 81; i++) {
-		//get the row
-		var row = Math.floor(i / 9);
-
-		//get the column
-		var col = i % 9;
-
-		//get the box
-		var box = 0;
-		if (row > 5) {
-			if (col > 5)
-				box = 8;
-			else if (col > 2)
-				box = 7;
-			else
-				box = 6;
-		} else if (row > 2) {
-			if (col > 5)
-				box = 5;
-			else if (col > 2)
-				box = 4;
-			else
-				box = 3;
-		} else {
-			if (col > 5)
-				box = 2;
-			else if (col > 2)
-				box = 1;
-			else
-				box = 0;
-		}
-
-		var random = _.random(1,9);
-
-		var ranArr = [];
-
-		while (_.contains(rowArr[row], random) ||
-			   _.contains(colArr[col], random) ||
-			   _.contains(boxArr[box], random)) {
-			
-			if (!_.contains(ranArr, random)) {
-				ranArr.push(random);
-			}
-
-			if (ranArr.length == 9) break;
-
-			random = _.random(1,9);
-		}
-
-		if (ranArr.length == 9) break;
-
-		rowArr[row].push(random);
-		colArr[col].push(random);
-		boxArr[box].push(random);
-		brd[i] = random;
-	}
-
-	while (brd.length != 81) {
-		brd = genBoard();
-	}
-
-	return brd;
-}
-
-var makePartialBoard = function(board, difficulty) {
-	//number of values that will be given
-	var numGivens = 0;
-	if (difficulty === 'Easy') {
-		numGivens = _.random(36, 45);
-	} else if (difficulty === 'Medium') {
-		numGivens = _.random(30,35);
-	} else {
-		numGivens = _.random(25,29);
-	}
-
-	var numRemoved = 81 - numGivens;
-
-	//create copy to manipulate and return
-	var copy = [];
-	for (var i = 0; i < 81; i++) {
-		copy[i] = board[i];
-	}
-
-	//array of indices removed
-	var removed = [];
-
-	for (var i = 0; i < numRemoved; i++) {
-		//get a random index to remove
-		var random = _.random(0,80);
-		while (_.contains(removed, random)) {
-			random = _.random(0,80);
-		}
-
-		//remove that number and check that the partial solution is still unique
-		var temp = copy[random];
-		copy[random] = 0;
-		//while it's not unique, choose a dif index
-		while (!isUnique(copy, random)) {
-			removed.push(random);
-			copy[random] = temp;
-			while (_.contains(removed, random)) {
-				random = _.random(0,80);
-			}
-			temp = copy[random];
-			copy[random] = 0;
-		}
-		removed.push(random);
-	}
-
-	return copy;
-}
-
-var hasNextEmpty = function(board) {
-	return _.contains(board, 0);
-}
-
-var nextEmpty = function(board) {
-	for (var i = 0; i < 81; i++) {
-		if (board[i] === 0) return i;
-	}
-}
-
-var getRow = function(board, i) {
-	var ret = [];
-	var cur = i * 9;
-	for (var j = 0; j < 9; j++) {
-		ret.push(board[cur+j]);
-	}
-	return ret;
-}
-
-var getCol = function(board, i) {
-	var ret = [];
-	for (var j = 0; j < 9; j++) {
-		ret.push(board[i+(j*9)]);
-	}
-	return ret;
-}
-
-var getBox = function(board, i) {
-	var ret = [];
-	for (var j = 0; j < 3; j++) {
-		var multiplier = 0;
-		if (i > 5) {
-			multiplier = 4;
-		} else if (i > 2) {
-			multiplier = 2;
-		}
-		var id = (3 * i) + (9 * (j + multiplier));
-		ret.push(board[id]);
-		ret.push(board[id+1]);
-		ret.push(board[id+2]);
-	}
-	return ret;
-}
-
-var isUniqueArr = function(arr) {
-	for (var i = 0; i < arr.length; i++) {
-		for (var j = 0; j < arr.length; j++) {
-			if (i != j) {
-				if (arr[i] === 0 || arr[j] === 0) {
-					continue;
-				}
-				else if (arr[i] === arr[j]) {
-					return false;
-				}
-			}
-		}
-	}
-	return true;
-}
-
-var isValid = function(board) {
-	for (var i = 0; i < 9; i++) {
-		var row = getRow(board, i);
-		var col = getCol(board, i);
-		var box = getBox(board, i);
-		if (!(isUniqueArr(row) && isUniqueArr(col) && isUniqueArr(box))) {
-			return false;
-		}
-	}
-	return true;
-}
-
-var isSolvable = function(board) {
-	var copy = [];
-	for (var i = 0; i < 81; i++) {
-		copy[i] = board[i];
-	}
-	if (hasNextEmpty(board)) {
-		var index = nextEmpty(board);
-		for (var i = 1; i < 10; i++) {
-			copy[index] = i;
-			if (isValid(copy)) {
-				if (isSolvable(copy)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	} else {
-		return true;
-	}
-}
-
-var isUnique = function(board, index) {
-	var numSolutions = 0;
-
-	var copy = [];
-	for (var i = 0; i < 81; i++) {
-		copy[i] = board[i];
-	}
-
-	for (var i = 1; i < 10; i++) {
-		copy[index] = i;
-		if (isValid(copy)) {
-			if (isSolvable(copy)) {
-				numSolutions++;
-				if (numSolutions > 1) {
-					return false;
-				}
-			}
-		}
-	}
-
-	return numSolutions === 1;
-}
-
 var HintCheckBox = React.createClass({
 	handleClick: function() {
 		this.props.onClick();
@@ -485,10 +244,24 @@ var Game = React.createClass({
   	},
   	/* (end adaptation) */
 	createBoard: function(difficulty) {
-		var board = genBoard();
-		this.setState({solution: board});
+		var board =[];
+		var gBoard = [];
 
-		var gBoard = makePartialBoard(board, difficulty);
+		if (difficulty === "Easy") {
+			var boardNum = _.random(0,499);
+			board = easyBoards[boardNum + "full"];
+			gBoard = easyBoards[boardNum];
+		} else if (difficulty === "Medium") {
+			var boardNum = _.random(0,249);
+			board = mediumBoards[boardNum + "full"];
+			gBoard = mediumBoards[boardNum];
+		} else {
+			var boardNum = _.random(0,99);
+			board = hardBoards[boardNum + "full"];
+			gBoard = hardBoards[boardNum];
+		}
+
+		this.setState({solution: board});
 
 		var copy = [];
 		for (var i = 0; i < 81; i++) {
@@ -614,11 +387,11 @@ var Game = React.createClass({
 		$(newID).addClass("selected");
 	},
 	onDifClick: function(difficulty) {
-		if (difficulty.props.difficulty === "Hard") {
+		/*if (difficulty.props.difficulty === "Hard") {
 			var msg = "This may take a moment to load.  If you wait over 30 seconds, please refresh the page and try again.";
 			var msg2 = "\n Feel free to close this window.  Thanks for playing!"
 			alert(msg + msg2);
-		}
+		}*/
 		var dif = "-" + difficulty.props.difficulty + "-";
 		this.setState({secondsElapsed: 0, curDifficulty: dif});
 		this.createBoard(difficulty.props.difficulty);
