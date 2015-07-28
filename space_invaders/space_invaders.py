@@ -283,6 +283,7 @@ while True:
 				if event.key == K_RETURN:
 					lives = 2
 					score = 0
+					level = 0
 					alive = True
 					player_top = pygame.Rect(player_x + 20, player_y, 10, 5)
 					player_bottom = pygame.Rect(player_x, player_y + 5, 48, 18)
