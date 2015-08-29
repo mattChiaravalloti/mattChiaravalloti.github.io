@@ -85,6 +85,29 @@ hr {
 	float: right;
 }
 
+.jump-bar {
+	margin: auto;
+	margin-top: 20px;
+	width: 50%;
+	text-align: center;
+}
+
+#jump-title {
+	font-style: italic;
+}
+
+.jump-button:hover {
+	background-color: #999999;	
+}
+
+#jump-button1 {
+	float: left;
+}
+
+#jump-button3 {
+	float: right;
+}
+
 .summary {
 	padding: 10px;
 	background-color: #e9e9e9;
