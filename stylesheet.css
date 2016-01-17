@@ -65,6 +65,15 @@ a:link, a:visited {
 	border-radius: 5px;
 }
 
+.inactive-link {
+   pointer-events: none;
+   cursor: default;
+}
+
+.inactive-link-msg {
+	color: #ea4958;
+}
+
 hr {
 	color: #999999;
 }
@@ -121,6 +130,11 @@ hr {
 .summary span {
 	font-weight: bold;
 	color: #ea4958;
+}
+
+.stress-word {
+	color: #ea4958;
+	font-style: italic;
 }
 
 .table-links {
