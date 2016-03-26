@@ -281,7 +281,7 @@ var isUnique = function(board, index) {
 }
 
 boardFunctions = {
-	isValid: isValid;
+	isValid: isValid
 }
 
 module.exports = boardFunctions;
