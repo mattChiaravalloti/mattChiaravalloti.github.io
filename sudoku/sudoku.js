@@ -25,6 +25,8 @@ this breakdown will allow me to create dif DOM elts with proper classes/ids for 
 
 */
 
+var boardFunctions = require('./board_generator.js');
+
 var getBoxNumber = function(i) {
 	//get the row
 	var row = Math.floor(i / 9);
@@ -341,7 +343,7 @@ var Game = React.createClass({
 						break;
 					}
 				}
-				if (done && isValid(board)) {
+				if (done && boardFunctions.isValid(board)) {
 					var t = this.state.secondsElapsed;
 					if (t < this.state.bestTime || this.state.bestTime === 0) {
 						localStorage["best_time"] = t;

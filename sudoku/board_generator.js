@@ -280,6 +280,12 @@ var isUnique = function(board, index) {
 	return numSolutions === 1;
 }
 
+boardFunctions = {
+	isValid: isValid;
+}
+
+module.exports = boardFunctions;
+
 // Uncomment one of the following sections at a time-- run to generate JSON file
 // that contains partial boards and their completed counterparts
 
