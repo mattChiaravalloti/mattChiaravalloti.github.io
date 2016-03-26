@@ -25,8 +25,6 @@ this breakdown will allow me to create dif DOM elts with proper classes/ids for 
 
 */
 
-var boardFunctions = require('./board_generator.js');
-
 var getBoxNumber = function(i) {
 	//get the row
 	var row = Math.floor(i / 9);
@@ -59,6 +57,79 @@ var getBoxNumber = function(i) {
 			box = 0;
 	}
 	return box;
+}
+
+// Get the array that represents the 9 elements in row #i
+var getRow = function(board, i) {
+	var ret = [];
+	var cur = i * 9;
+	for (var j = 0; j < 9; j++) {
+		ret.push(board[cur+j]);
+	}
+	return ret;
+}
+
+
+// Get the array that represents the 9 elements in column #i
+var getCol = function(board, i) {
+	var ret = [];
+	for (var j = 0; j < 9; j++) {
+		ret.push(board[i+(j*9)]);
+	}
+	return ret;
+}
+
+// Get the array that represents the 9 elements in box #i
+var getBox = function(board, i) {
+	var ret = [];
+	for (var j = 0; j < 3; j++) {
+		var multiplier = 0;
+		if (i > 5) {
+			multiplier = 4;
+		} else if (i > 2) {
+			multiplier = 2;
+		}
+		var id = (3 * i) + (9 * (j + multiplier));
+		ret.push(board[id]);
+		ret.push(board[id+1]);
+		ret.push(board[id+2]);
+	}
+	return ret;
+}
+
+/**
+ * Check if each element in the array is a unique, non-zero number
+ */
+var isUniqueArr = function(arr) {
+	for (var i = 0; i < arr.length; i++) {
+		for (var j = 0; j < arr.length; j++) {
+			if (i != j) {
+				if (arr[i] === 0 || arr[j] === 0) {
+					continue;
+				}
+				else if (arr[i] === arr[j]) {
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+/**
+ * Check if this is a valid board by checking if each of the 9 rows, 9 columns, and
+ * 9 boxes are unique
+ */
+var isValid = function(board) {
+	for (var i = 0; i < 9; i++) {
+		var row = getRow(board, i);
+		var col = getCol(board, i);
+		var box = getBox(board, i);
+		if (!(isUniqueArr(row) && isUniqueArr(col) && isUniqueArr(box))) {
+			return false;
+		}
+	}
+	return true;
 }
 
 var HintCheckBox = React.createClass({
@@ -343,7 +414,7 @@ var Game = React.createClass({
 						break;
 					}
 				}
-				if (done && boardFunctions.isValid(board)) {
+				if (done && isValid(board)) {
 					var t = this.state.secondsElapsed;
 					if (t < this.state.bestTime || this.state.bestTime === 0) {
 						localStorage["best_time"] = t;
