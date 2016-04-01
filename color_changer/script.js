@@ -82,6 +82,6 @@ $(document).ready(function () {
 	}
 
 	$("#random-container").on("click", randomButtonClick);
-	$("#rgb-choice-container").on("click", rgbChoiceButtonClick);
+	$("#rgb-choice-container").on("click keyup", rgbChoiceButtonClick);
 	$("#hex-choice-container").on("click", hexChoiceButtonClick);
 });
